@@ -1,8 +1,8 @@
 #!/bin/bash
 #
-# Title:      
-# Author(s):  
-# URL:        
+# Title:      navidrome
+# Author(s):  mondychan
+# URL:        https://github.com/deluan/navidrome/ https://hub.docker.com/r/deluan/navidrome
 # GNU:        General Public License v3.0
 ################################################################################
 ---
@@ -12,10 +12,10 @@
     # FACTS #######################################################################
     - name: 'Set Known Facts'
       set_fact:
-        pgrole: 'plexcleaner'
-        intport: '80'
-        extport: '5000'
-        image: 'selexin/plex-library-cleaner:latest'
+        pgrole: 'navidrome'
+        intport: '4533'
+        extport: '4533'
+        image: 'deluan/navidrome'
 
     # CORE (MANDATORY) ############################################################
     - name: 'Including cron job'
@@ -42,18 +42,16 @@
     - name: 'Setting {{pgrole}} Volumes'
       set_fact:
         pg_volumes:
+          - '/opt/appdata/{{pgrole}}:/data'
+          - '/mnt/gdrive/music:/music:ro'
           - '/etc/localtime:/etc/localtime:ro'
-          - '/opt/appdata/{{pgrole}}:/config'
-          - '{{path.stdout}}:{{path.stdout}}'
 
-    - name: 'Setting {{pgrole}} ENV'
+    - name: 'Setting Environment'
       set_fact:
         pg_env:
           PUID: '1000'
           PGID: '1000'
-          PLEX_BASE_URL: 'http://plex:32400'
-          PLEX_TOKEN: 'somerandomstring'
-          
+          ND_ENABLETRANSCODINGCONFIG: 'true'
 
     # MAIN DEPLOYMENT #############################################################
     - name: 'Deploying {{pgrole}}'
@@ -61,11 +59,9 @@
         name: '{{pgrole}}'
         image: '{{image}}'
         pull: yes
-        published_ports:
-          - '{{ports.stdout}}{{extport}}:{{intport}}'
         volumes: '{{pg_volumes}}'
         env: '{{pg_env}}'
-        restart_policy: unless-stopped
+        restart_policy: always
         networks:
           - name: plexguide
             aliases:

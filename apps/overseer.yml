@@ -1,7 +1,8 @@
 #!/bin/bash
-#
-# Author(s):  hawkinzzz
-# URL:        https://pgblitz.com - http://github.pgblitz.com
+# 
+# Title:      overseer
+# Author(s):  smashingtags
+# URL:        https://github.com/sct/overseerr
 # GNU:        General Public License v3.0
 ################################################################################
 ---
@@ -11,10 +12,10 @@
     # FACTS #######################################################################
     - name: 'Set Known Facts'
       set_fact:
-        pgrole: 'oscarr'
-        intport: '5656'
-        extport: '5656'
-        image: 'morpheus65535/oscarr:latest'
+        pgrole: 'overseer'
+        intport: '5055'
+        extport: '5055'
+        image: 'sctx/overseerr'
 
     # CORE (MANDATORY) ############################################################
     - name: 'Including cron job'
@@ -41,7 +42,7 @@
     - name: 'Setting {{pgrole}} Volumes'
       set_fact:
         pg_volumes:
-          - '/opt/appdata/{{pgrole}}/data:/oscarr/data'
+          - '/opt/appdata/{{pgrole}}:/app/config'
 
     - name: 'Setting {{pgrole}} ENV'
       set_fact:
@@ -49,6 +50,7 @@
           PUID: '1000'
           PGID: '1000'
           TZ: 'America/New_York'
+          LOG_LEVEL: 'info'
 
     # MAIN DEPLOYMENT #############################################################
     - name: 'Deploying {{pgrole}}'

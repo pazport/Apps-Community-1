@@ -1,7 +1,8 @@
 #!/bin/bash
-#
-# Author(s):  hawkinzzz
-# URL:        https://pgblitz.com - http://github.pgblitz.com
+# Default login is admin:admin
+# Title:      papermerge
+# Author(s):  smashingtags
+# URL:        https://github.com/linuxserver/docker-papermerge
 # GNU:        General Public License v3.0
 ################################################################################
 ---
@@ -11,10 +12,10 @@
     # FACTS #######################################################################
     - name: 'Set Known Facts'
       set_fact:
-        pgrole: 'oscarr'
-        intport: '5656'
-        extport: '5656'
-        image: 'morpheus65535/oscarr:latest'
+        pgrole: 'papermerge'
+        intport: '8000'
+        extport: '8333'
+        image: 'linuxserver/papermerge'
 
     # CORE (MANDATORY) ############################################################
     - name: 'Including cron job'
@@ -41,7 +42,8 @@
     - name: 'Setting {{pgrole}} Volumes'
       set_fact:
         pg_volumes:
-          - '/opt/appdata/{{pgrole}}/data:/oscarr/data'
+          - '/opt/appdata/{{pgrole}}/config:/config'
+          - '/opt/appdata/{{pgrole}}/data:/data'
 
     - name: 'Setting {{pgrole}} ENV'
       set_fact:

@@ -1,8 +1,9 @@
 #!/bin/bash
 #
-# Author(s):  hawkinzzz
-# URL:        https://pgblitz.com - http://github.pgblitz.com
-# GNU:        General Public License v3.0
+# Title:      Unmanic
+# Author(s):  Josh Sunnex (Josh5)
+# URL:        https://github.com/Josh5/unmanic
+# GNU:        GPL-3.0
 ################################################################################
 ---
 - hosts: localhost
@@ -11,10 +12,10 @@
     # FACTS #######################################################################
     - name: 'Set Known Facts'
       set_fact:
-        pgrole: 'oscarr'
-        intport: '5656'
-        extport: '5656'
-        image: 'morpheus65535/oscarr:latest'
+        pgrole: 'unmanic'
+        intport: '8888'
+        extport: '7777'
+        image: 'josh5/unmanic:latest'
 
     # CORE (MANDATORY) ############################################################
     - name: 'Including cron job'
@@ -24,9 +25,9 @@
     - name: 'Adding Traefik'
       set_fact:
         pg_labels:
+          traefik.frontend.auth.forward.address: '{{gauth}}'
           traefik.enable: 'true'
           traefik.port: '{{intport}}'
-          traefik.frontend.auth.forward.address: '{{gauth}}'
           traefik.frontend.rule: 'Host:{{pgrole}}.{{domain.stdout}}{{tldset}}{{cname}}'
           traefik.frontend.headers.SSLHost: '{{domain.stdout}}'
           traefik.frontend.headers.SSLRedirect: 'true'
@@ -38,17 +39,21 @@
           traefik.frontend.headers.customResponseHeaders: 'X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex'
           traefik.frontend.headers.forceSTSHeader: 'true'
 
-    - name: 'Setting {{pgrole}} Volumes'
+    - name: 'Setting PG Volumes'
       set_fact:
         pg_volumes:
-          - '/opt/appdata/{{pgrole}}/data:/oscarr/data'
-
-    - name: 'Setting {{pgrole}} ENV'
+          - '/etc/localtime:/etc/localtime:ro'
+          - '/opt/appdata/{{pgrole}}:/config'
+          - '/tmp/unmanic:/tmp/unmanic'
+          - '{{path.stdout}}:{{path.stdout}}'
+          - '/mnt:/mnt'
+          
+    - name: 'Setting PG ENV'
       set_fact:
         pg_env:
           PUID: '1000'
           PGID: '1000'
-          TZ: 'America/New_York'
+          TZ: 'UTC'
 
     # MAIN DEPLOYMENT #############################################################
     - name: 'Deploying {{pgrole}}'

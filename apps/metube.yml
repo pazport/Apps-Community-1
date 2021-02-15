@@ -1,6 +1,7 @@
 #!/bin/bash
 #
-# Author(s):  hawkinzzz
+# Title:      PGBlitz (Reference Title File)
+# Author(s):  Admin9705
 # URL:        https://pgblitz.com - http://github.pgblitz.com
 # GNU:        General Public License v3.0
 ################################################################################
@@ -11,10 +12,10 @@
     # FACTS #######################################################################
     - name: 'Set Known Facts'
       set_fact:
-        pgrole: 'oscarr'
-        intport: '5656'
-        extport: '5656'
-        image: 'morpheus65535/oscarr:latest'
+        pgrole: 'metube'
+        intport: '8081'
+        extport: '4568'
+        image: 'alexta69/metube:latest'
 
     # CORE (MANDATORY) ############################################################
     - name: 'Including cron job'
@@ -41,14 +42,17 @@
     - name: 'Setting {{pgrole}} Volumes'
       set_fact:
         pg_volumes:
-          - '/opt/appdata/{{pgrole}}/data:/oscarr/data'
+          - '/etc/localtime:/etc/localtime:ro'
+          - '/opt/appdata/{{pgrole}}:/app'
+          - '{{path.stdout}}:{{path.stdout}}'
 
     - name: 'Setting {{pgrole}} ENV'
       set_fact:
         pg_env:
           PUID: '1000'
           PGID: '1000'
-          TZ: 'America/New_York'
+          DOWNLOAD_DIR: 'Set me to your unionfs'
+
 
     # MAIN DEPLOYMENT #############################################################
     - name: 'Deploying {{pgrole}}'

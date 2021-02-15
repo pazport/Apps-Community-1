@@ -1,6 +1,7 @@
 #!/bin/bash
 #
-# Author(s):  hawkinzzz
+# Title:      PGBlitz (Reference Title File)
+# Author(s):  Admin9705
 # URL:        https://pgblitz.com - http://github.pgblitz.com
 # GNU:        General Public License v3.0
 ################################################################################
@@ -11,10 +12,10 @@
     # FACTS #######################################################################
     - name: 'Set Known Facts'
       set_fact:
-        pgrole: 'oscarr'
-        intport: '5656'
-        extport: '5656'
-        image: 'morpheus65535/oscarr:latest'
+        pgrole: 'flaresolverr'
+        intport: '8191'
+        extport: '8191'
+        image: 'flaresolverr/flaresolverr:latest'
 
     # CORE (MANDATORY) ############################################################
     - name: 'Including cron job'
@@ -41,14 +42,16 @@
     - name: 'Setting {{pgrole}} Volumes'
       set_fact:
         pg_volumes:
-          - '/opt/appdata/{{pgrole}}/data:/oscarr/data'
+          - '/etc/localtime:/etc/localtime:ro'
+          - '/opt/appdata/{{pgrole}}:/home/flaresolverr'
+          - '{{path.stdout}}:{{path.stdout}}'
 
     - name: 'Setting {{pgrole}} ENV'
       set_fact:
         pg_env:
           PUID: '1000'
           PGID: '1000'
-          TZ: 'America/New_York'
+          CAPTCHA_SOLVER: 'hcaptcha-solver'
 
     # MAIN DEPLOYMENT #############################################################
     - name: 'Deploying {{pgrole}}'
