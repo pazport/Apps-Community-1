@@ -47,8 +47,7 @@
           - '/opt/appdata/{{pgrole}}/Database:/var/lib/mongodb'
           - '/opt/appdata/{{pgrole}}/Media:/home/Tdarr/Media'
           - '{{path.stdout}}:{{path.stdout}}'
-          - '/mnt:/mnt'
-          
+                    
     - name: 'Setting PG ENV'
       set_fact:
         pg_env:
