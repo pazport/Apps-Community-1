@@ -23,6 +23,7 @@
       include_tasks: '/opt/communityapps/apps/_core.yml'
 
     # LABELS ######################################################################
+
     - name: 'Adding Traefik'
       set_fact:
         pg_labels:
@@ -40,24 +41,21 @@
           traefik.frontend.headers.customResponseHeaders: 'X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex'
           traefik.frontend.headers.forceSTSHeader: 'true'
 
-    - name: 'Setting {{pgrole}} Volumes'
+    - name: 'Setting PG Volumes'
       set_fact:
         pg_volumes:
-          - '/opt/appdata/{{pgrole}}:/root/.xteve:rw'
-          - '/opt/appdata/tvheadend/data/:/TVH:rw'
-          - '/opt/appdata/{{pgrole}}/_config:/config:rw'
-          - '/opt/appdata/{{pgrole}}/temp:/tmp/xteve:rw'
+          - '/opt/appdata/{{pgrole}}:/home/xteve/xteve'
+          - '/opt/appdata/{{pgrole}}/temp:/tmp/xteve'
           - '{{path.stdout}}:{{path.stdout}}'
           - '/etc/localtime:/etc/localtime:ro'
+          - '/mnt:/mnt'
 
-    - name: 'Setting Environment'
+    - name: 'Setting PG ENV'
       set_fact:
         pg_env:
           PUID: '1000'
-          PGID: '1000' 
-          log-opt max-size: '10m'
-          log-opt max-file: '3'
-          
+          PGID: '1000'
+
     # MAIN DEPLOYMENT #############################################################
 
     - name: 'Deploying {{pgrole}}'

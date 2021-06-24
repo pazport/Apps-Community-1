@@ -30,13 +30,13 @@
           traefik.port: '80'
           traefik.frontend.rule: 'Host:{{pgrole}}.{{domain.stdout}}{{tldset}}{{cname}}'
 
-    - name: 'Setting {{pgrole}} Volumes'
+    - name: 'Setting PG Volumes'
       set_fact:
         pg_volumes:
           - '/opt/appdata/{{pgrole}}/data:/data'
           - '/opt/appdata/{{pgrole}}/database:/database'
 
-    - name: 'Setting {{pgrole}} ENV'
+    - name: 'Setting PG ENV'
       set_fact:
         pg_env:
           PUID: '1000'

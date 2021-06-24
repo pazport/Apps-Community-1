@@ -1,8 +1,8 @@
 #!/bin/bash
 #
-# Title:      PGBlitz (rdp-calibre)
-# Author(s):  MrDoob
-# URL:        https://pgblitz.com - http://github.pgblitz.com
+# Title:      docker-calibre
+# Author(s):  Kovid Goyal & Contributors, linuxserver.io
+# URL:        https://calibre-ebook.com/ - https://github.com/linuxserver/docker-calibre
 # GNU:        General Public License v3.0
 ################################################################################
 ---
@@ -27,9 +27,9 @@
     - name: 'Adding Traefik'
       set_fact:
         pg_labels:
+          traefik.frontend.auth.forward.address: '{{gauth}}'
           traefik.enable: 'true'
           traefik.port: '{{intport}}'
-          traefik.frontend.auth.forward.address: '{{gauth}}'
           traefik.frontend.rule: 'Host:{{pgrole}}.{{domain.stdout}}{{tldset}}{{cname}}'
           traefik.frontend.headers.SSLHost: '{{domain.stdout}}'
           traefik.frontend.headers.SSLRedirect: 'true'
@@ -41,23 +41,20 @@
           traefik.frontend.headers.customResponseHeaders: 'X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex'
           traefik.frontend.headers.forceSTSHeader: 'true'
 
-    - name: 'Setting {{pgrole}} Volumes'
+    - name: 'Setting PG Volumes'
       set_fact:
         pg_volumes:
           - '/opt/appdata/{{pgrole}}:/config:rw'
           - '{{path.stdout}}:{{path.stdout}}'
-          - '/mnt/unionfs:/unionfs:rw'
+          - '/mnt:/mnt:rw'
           - '/etc/localtime:/etc/localtime:ro'
-          - '/mnt/unionfs/library:/library:rw'
+          - '/mnt/unionfs/libary:/library:rw'
 
-    - name: 'Setting {{pgrole}} ENV'
+    - name: 'Setting PG ENV'
       set_fact:
         pg_env:
           PUID: '1000'
           PGID: '1000'
-          TZ: 'America/New_York'
-          WIDTH: '1280'
-          HEIGHT: '720'
 
     # MAIN DEPLOYMENT #############################################################
     - name: 'Deploying {{pgrole}}'

@@ -2,25 +2,28 @@
 #
 # Title:      UbuntuGUI
 # Author(s):  timekills
+# Version: 1.01
 # URL:        https://plexguide.com - http://github.plexguide.com
 # GNU:        General Public License v3.0
 # Info:       https://github.com/fcwu/docker-ubuntu-vnc-desktop
-# Use: Change default passwords in lines 16 and 22 if desired.
+# Password change option 1: Change default passwords in lines 19 and 25 if desired.
+# Password change option 2 (automated): From command prompt as SU type (without quotes) "ansible-playbook /opt/communityapps/apps/ubvnc.yml"
+# Docker:     Docker image is available at: https://github.com/fcwu/docker-ubuntu-vnc-desktop
 ################################################################################
 ---
 - hosts: localhost
   vars_prompt:
   
-  - name: "VNC_PASSWORD"
-    prompt: "What do you want to use for the VNC access password?"
+  - name: VNC_PASSWORD
+    prompt: What do you want to use for the VNC access password?
     default: "!PGtest!"
-    unsafe: yes
+#    unsafe: yes
     private: no
 
-  - name: "PASSWORD"
-    prompt: "What do you want to use for the default linux user and sudo password?"
+  - name: PASSWORD
+    prompt: What do you want to use for the default linux user and sudo password?
     default: "!PGtest!"
-    unsafe: yes
+#    unsafe: yes
     private: no
 
   gather_facts: false
@@ -32,7 +35,7 @@
         pgrole: 'ubvnc'
         intport: '80'
         extport: '6080'
-        image: 'dorowu/ubuntu-desktop-lxde-vnc:bionic-lxqt'
+        image: 'dorowu/ubuntu-desktop-lxde-vnc'
 
     - name: 'Including cron job'
       include_tasks: '/opt/communityapps/apps/_core.yml'
@@ -62,15 +65,17 @@
     - name: 'Setting default ENV'
       set_fact:
         pg_env:
-          USER_ID: 1000
-          GROUP_ID: 1000
-          DISPLAY_WIDTH: 1600
-          DISPLAY_HEIGHT: 900
+          USER_ID: '1000'
+          GROUP_ID: '1000'
+          DISPLAY_WIDTH: '1600'
+          DISPLAY_HEIGHT: '900'
           USER: "apps"
           VNC_PASSWORD: '{{VNC_PASSWORD}}'
           PASSWORD: '{{PASSWORD}}'
           ALSADEV: "hw:2,0"
 #          SECURE_CONNECTION: 1
+          SSL_PORT: '443'
+          shm-size: '4g'
 
 
     # MAIN DEPLOYMENT #############################################################
@@ -96,6 +101,6 @@
         state: started
         labels: '{{pg_labels}}'
     - debug:
-        msg: 'VNC_PASSWORD is {{ VNC_PASSWORD }}'
+        msg: 'VNC password is {{ VNC_PASSWORD }}'
     - debug:
-        msg: 'User PASSWORD is {{ PASSWORD }}'
+        msg: 'User and SUDO password is {{ PASSWORD }}'

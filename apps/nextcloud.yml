@@ -30,16 +30,18 @@
           traefik.enable: 'true'
           traefik.https.port: '443'
           traefik.https.frontend.entryPoints: 'https'
-          traefik.https.frontend.rule: 'Host:{{tldset}}{{cname}}'
+          traefik.https.frontend.rule: 'Host:{{pgrole}}.{{domain.stdout}}{{tldset}}{{cname}}'
 
-    - name: 'Setting {{pgrole}} Volumes'
+    - name: 'Setting PG Volumes'
       set_fact:
         pg_volumes:
-          - '/opt/appdata/{{pgrole}}/data:/data'
+          - '/etc/localtime:/etc/localtime:ro'
+          - '/opt/appdata/nextcloud/data:/data'
           - '/opt/appdata/{{pgrole}}/conf:/config'
           - '{{path.stdout}}:{{path.stdout}}'
+          - '/mnt:/mnt'
 
-    - name: 'Setting {{pgrole}} ENV'
+    - name: 'Setting PG ENV'
       set_fact:
         pg_env:
           PUID: '1000'

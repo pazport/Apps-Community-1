@@ -31,15 +31,15 @@
           traefik.enable: 'true'
           traefik.https.port: '443'
           traefik.https.frontend.entryPoints: 'https'
-          traefik.https.frontend.rule: 'Host:{{tldset}}{{cname}}'
+          traefik.https.frontend.rule: 'Host:{{pgrole}}.{{domain.stdout}}{{tldset}}{{cname}}'
 
-    - name: 'Setting {{pgrole}} Volumes'
+    - name: 'Setting PG Volumes'
       set_fact:
         pg_volumes:
-          - '/opt/appdata/{{pgrole}}:/config'
+          - '/opt/appdata/heimdall:/config'
           - '/etc/localtime:/etc/localtime:ro'
 
-    - name: 'Setting {{pgrole}} ENV'
+    - name: 'Setting PG ENV'
       set_fact:
         pg_env:
           PUID: '1000'

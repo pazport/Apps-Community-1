@@ -55,16 +55,17 @@
           traefik.frontend.headers.customResponseHeaders: 'X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex'
           traefik.frontend.headers.forceSTSHeader: 'true'
 
-    - name: 'Setting {{pgrole}} Volumes'
+    - name: 'Setting PG Volumes'
       set_fact:
         pg_volumes:
           - '/etc/localtime:/etc/localtime:ro'
           - '{{path.stdout}}:{{path.stdout}}'
+          - '/mnt:/mnt'
           - '/opt/appdata/{{pgrole}}:/config'
           - '{{path.stdout}}/downloads/{{pgrole}}/:/output:rw'
           - '/opt/appdata/{{pgrole}}/vpn:/vpn:rw'
 
-    - name: 'Setting {{pgrole}} ENV'
+    - name: 'Setting PG ENV'
       set_fact:
         pg_env:
           UID: '1000'

@@ -34,10 +34,11 @@
         - '/opt/appdata/{{pgrole}}/logs'
 
     # LABELS ######################################################################
+
     - name: 'Adding Traefik'
       set_fact:
         pg_labels:
-          traefik.enable: 'true'
+          traefik.enable: 'false'
           traefik.port: '{{intport}}'
           traefik.frontend.auth.forward.address: '{{gauth}}'
           traefik.frontend.rule: 'Host:{{pgrole}}.{{domain.stdout}}{{tldset}}{{cname}}'
@@ -50,15 +51,16 @@
           traefik.frontend.headers.contentTypeNosniff: 'true'
           traefik.frontend.headers.customResponseHeaders: 'X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex'
           traefik.frontend.headers.forceSTSHeader: 'true'
-          
+
     # VOLUMES #########
-    - name: 'Setting {{pgrole}} Volumes'
+
+    - name: 'Setting PG Volumes'
       set_fact:
         pg_volumes:
-          - '/opt/appdata/{{pgrole}}/data:/data'
-          - '/opt/appdata/{{pgrole}}/logs:/logs'
+          - '/opt/appdata/{{pgrole}}/data:/teamspeak/data'
+          - '/opt/appdata/{{pgrole}}/logs:/teamspeak/logs'
 
-    - name: 'Setting {{pgrole}} ENV'
+    - name: 'Setting PG ENV'
       set_fact:
         pg_env:
           PUID: '1000'

@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Title:      PGBlitz (Reference Title File)
-# Author(s):  Admin9705
+# Author(s):  Admin9705 # edited by mp-jt
 # URL:        https://pgblitz.com - http://github.pgblitz.com
 # GNU:        General Public License v3.0
 ################################################################################
@@ -22,7 +22,7 @@
       include_tasks: '/opt/communityapps/apps/_core.yml'
 
     # LABELS ######################################################################
-    - name: 'Adding Traefik for {{pgrole}}'
+    - name: 'Adding Traefik'
       set_fact:
         pg_labels:
           traefik.frontend.auth.forward.address: '{{gauth}}'
@@ -40,19 +40,18 @@
           traefik.frontend.headers.forceSTSHeader: 'true'
           traefik.frontend.headers.frameDeny: 'true'
 
-    - name: 'Setting {{pgrole}} Volumes'
+    - name: 'Setting PG Volumes'
       set_fact:
         pg_volumes:
           - '/opt/appdata/{{pgrole}}:/config'
-          - '/etc/localtime:/etc/localtime:ro'
 
-    - name: 'Setting {{pgrole}} ENV'
+    - name: 'Setting PG ENV'
       set_fact:
         pg_env:
           PUID: '1000'
           PGID: '1000'
-          branch: 'v2-master'
           fpm: 'false'
+          branch: 'master'
 
     # MAIN DEPLOYMENT #############################################################
     - name: 'Deploying {{pgrole}}'
