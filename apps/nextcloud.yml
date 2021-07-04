@@ -38,7 +38,6 @@
           - '/etc/localtime:/etc/localtime:ro'
           - '/opt/appdata/nextcloud/data:/data'
           - '/opt/appdata/{{pgrole}}/conf:/config'
-          - '{{path.stdout}}:{{path.stdout}}'
           - '/mnt:/mnt'
 
     - name: 'Setting PG ENV'

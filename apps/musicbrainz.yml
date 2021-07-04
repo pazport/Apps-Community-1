@@ -50,7 +50,6 @@
         pg_volumes:
           - '/opt/appdata/{{pgrole}}:/config:rw'
           - '/opt/appdata/{{pgrole}}:/data:rw'
-          - '{{path.stdout}}:{{path.stdout}}'
           - '/mnt:/mnt:rw'
           - '/etc/localtime:/etc/localtime:ro'
           - '/mnt/unionfs/music:/musiclibrary:rw'

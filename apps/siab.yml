@@ -50,7 +50,6 @@
       set_fact:
         pg_volumes:
           - '/opt/appdata/{{pgrole}}:/home/:rw'
-          - '{{path.stdout}}:{{path.stdout}}'
           - '/etc/localtime:/etc/localtime:ro'
           - '/mnt:/mnt'
     - name: 'Setting default ENV'

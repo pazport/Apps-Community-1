@@ -45,7 +45,6 @@
         pg_volumes:
           - '/opt/appdata/{{pgrole}}/config:/config:rw'
           - '/:/storage:ro'
-          - '{{path.stdout}}:{{path.stdout}}'
           - '/mnt/unionfs:/mnt/unionfs'
           - '{{path.stdout}}/{{pgrole}}/watch/Very_Fast_1080p30:/watch:rw'
           - '{{path.stdout}}/{{pgrole}}/watch/HQ_1080p30_Surround:/watch2:rw'
